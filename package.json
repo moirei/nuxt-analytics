@@ -1,0 +1,50 @@
+{
+  "name": "@moirei/nuxt-analytics",
+  "version": "0.1.0",
+  "description": "Analytics library for Nuxt 3",
+  "repository": "@moirei/nuxt-analytics",
+  "license": "MIT",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/types.d.ts",
+      "import": "./dist/module.mjs",
+      "require": "./dist/module.cjs"
+    }
+  },
+  "main": "./dist/module.cjs",
+  "types": "./dist/types.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "prepack": "nuxt-module-build",
+    "dev": "nuxi dev playground",
+    "dev:build": "nuxi build playground",
+    "dev:prepare": "nuxt-module-build --stub && nuxi prepare playground",
+    "release": "npm run lint && npm run test && npm run prepack && changelogen --release && npm publish && git push --follow-tags",
+    "lint": "eslint .",
+    "test": "vitest run",
+    "test:watch": "vitest watch"
+  },
+  "dependencies": {
+    "@nuxt/kit": "^3.5.2",
+    "p-queue": "^7.3.4"
+  },
+  "devDependencies": {
+    "@faker-js/faker": "^8.0.2",
+    "@nuxt/eslint-config": "^0.1.1",
+    "@nuxt/module-builder": "^0.4.0",
+    "@nuxt/schema": "^3.5.2",
+    "@nuxt/test-utils": "^3.5.1",
+    "@types/node": "^18",
+    "@types/serialize-javascript": "^5.0.2",
+    "@vue/test-utils": "^2.3.2",
+    "changelogen": "^0.5.3",
+    "eslint": "^8.41.0",
+    "nuxt": "^3.5.1",
+    "serialize-javascript": "^6.0.1",
+    "vitest": "^0.31.1",
+    "vue": "^3.3.4"
+  }
+}
