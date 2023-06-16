@@ -45,6 +45,44 @@ describe("analytics", async () => {
     // expect(analytics["booted"]).toBeTruthy();
   });
 
+  it("should only install channels in applicable env", async () => {
+    const ch1InstallSpy = vi.fn();
+    const ch2InstallSpy = vi.fn();
+    const ch3InstallSpy = vi.fn();
+
+    const ch1TrackSpy = vi.fn();
+    const ch2TrackSpy = vi.fn();
+    const ch3TrackSpy = vi.fn();
+
+    const ch1 = fakeChannel({
+      env: "a",
+      install: ch1InstallSpy,
+      track: ch1TrackSpy,
+    });
+    const ch2 = fakeChannel({
+      env: "b",
+      install: ch2InstallSpy,
+      track: ch2TrackSpy,
+    });
+    const ch3 = fakeChannel({ install: ch3InstallSpy, track: ch3TrackSpy });
+
+    analytics = createAnalytics({
+      channels: [ch1, ch2, ch3],
+      env: "a",
+    });
+
+    await analytics.boot();
+    await analytics.track({ event: "test" });
+
+    expect(ch1InstallSpy).toHaveBeenCalled();
+    expect(ch2InstallSpy).not.toHaveBeenCalled();
+    expect(ch3InstallSpy).toHaveBeenCalled();
+
+    expect(ch1TrackSpy).toHaveBeenCalled();
+    expect(ch2TrackSpy).not.toHaveBeenCalled();
+    expect(ch3TrackSpy).toHaveBeenCalled();
+  });
+
   it("should NOT boot analytics if disabled", async () => {
     const channel = fakeChannel();
 

@@ -47,13 +47,17 @@ export class Analytics implements IAnalytics {
   private booted = false;
   private channels: Channel[];
   private adapters: BaseAdapter[];
-  private env?: string;
   private user?: EventUser;
 
   constructor(options: AnalyticsOptions) {
-    this.channels = options.channels.filter((channel) => !channel.disabled);
+    this.channels = options.channels
+      .filter((channel) => !channel.disabled)
+      .filter((channel) => {
+        if (!channel.env) return true;
+        const e = unwrap(channel.env);
+        return e.includes(options.env!);
+      });
     this.adapters = options.adapters;
-    this.env = options.env;
 
     this.disabled =
       options.disabled ||
@@ -216,14 +220,6 @@ export class Analytics implements IAnalytics {
     if (this.disabled) return;
 
     let channels = this.channels;
-
-    if (this.env) {
-      channels = channels.filter((channel) => {
-        if (!channel.env) return true;
-        const e = unwrap(channel.env);
-        return e.includes(this.env!);
-      });
-    }
 
     if (payload.channels) {
       const ch = unwrap(payload.channels);
