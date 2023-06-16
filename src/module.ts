@@ -19,6 +19,7 @@ export default defineNuxtModule<ModuleOptions>({
     configKey: "analytics",
   },
   defaults: {
+    env: process.env.NODE_ENV,
     disabled: false,
     trackGlobalPages: true,
     superProperties: {},

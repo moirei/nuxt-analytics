@@ -1,4 +1,3 @@
-import jiti from "jiti";
 import {
   Channel,
   Enumerable,
@@ -24,15 +23,6 @@ export const assert = <T>(message: string, value: T): T => {
     error(message);
   }
   return value;
-};
-
-export const readFile = async <T>(path: string): Promise<T> => {
-  const reader = jiti(import.meta.url, {
-    interopDefault: true,
-    requireCache: false,
-  });
-
-  return await reader(path);
 };
 
 export const isNil = (value: any): boolean => {

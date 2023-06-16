@@ -85,6 +85,7 @@ export interface ModuleOptions<
   C extends ChannelsConfigKey = ChannelsConfigKey
 > {
   // partytown: boolean;
+  env?: string;
   disabled: boolean;
   trackGlobalPages: boolean;
   superProperties: EventProperties;

@@ -19,7 +19,7 @@ declare module "#app" {
 export default defineNuxtPlugin((nuxtApp) => {
   const options = NuxtAnalytics.options as ModuleOptions;
 
-  const env = process.env.NODE_ENV;
+  const env = options.env;
   const channels: Channel[] = [];
   const adapters: BaseAdapter[] = [];
 
