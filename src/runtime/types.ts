@@ -129,3 +129,22 @@ export interface AnalyticsHooks {
   //   (error: Error, ...args: any[]): Promisable<any>;
   // };
 }
+
+export type TrackEventDirectiveValue = {
+  data: EventProperties;
+  observerInit?: IntersectionObserverInit;
+  channel?: Enumerable<string>;
+  clickAs?: string;
+  seenAs?: string;
+  onSeen?: { (): void };
+  onClick?: { (): void };
+};
+
+export type TrackEventDirectiveModifiers = {
+  once?: boolean;
+  seenOnce?: boolean;
+  clickOnce?: boolean;
+  clickOnly?: boolean;
+  seenOnly?: boolean;
+  observeQuiet?: boolean;
+};

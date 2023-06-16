@@ -1,31 +1,17 @@
 import type { DirectiveBinding, ObjectDirective } from "vue";
 import { useAnalytics } from "../composables/useAnalytics";
 import { SUPPORTS_INTERSECTION } from "../constants";
-import { Enumerable, EventProperties } from "../types";
+import {
+  Enumerable,
+  EventProperties,
+  TrackEventDirectiveModifiers,
+  TrackEventDirectiveValue,
+} from "../types";
 import { hasProp } from "../utils";
 import { ElementEvent } from "../events/ElementEvent";
 
 type TrackedElement = HTMLElement & { _observe?: any; _click?: any };
 type CbFunc = { (): void };
-
-export type TrackEventDirectiveValue = {
-  data: EventProperties;
-  observerInit?: IntersectionObserverInit;
-  channel?: Enumerable<string>;
-  clickAs?: string;
-  seenAs?: string;
-  onSeen?: CbFunc;
-  onClick?: CbFunc;
-};
-
-export type TrackEventDirectiveModifiers = {
-  once?: boolean;
-  seenOnce?: boolean;
-  clickOnce?: boolean;
-  clickOnly?: boolean;
-  seenOnly?: boolean;
-  observeQuiet?: boolean;
-};
 
 export interface ObserveDirectiveBinding
   extends Omit<DirectiveBinding, "modifiers" | "value"> {
@@ -56,8 +42,8 @@ function mounted(el: TrackedElement, binding: ObserveDirectiveBinding) {
 
   if (
     payload &&
-    hasProp(payload, "data") &&
-    (hasProp(payload, "channel") ||
+    (hasProp(payload, "data") ||
+      hasProp(payload, "channel") ||
       hasProp(payload, "clickAs") ||
       hasProp(payload, "seenAs") ||
       hasProp(payload, "onClick") ||

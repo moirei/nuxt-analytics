@@ -91,3 +91,15 @@ export * from "./runtime/events";
 export { ModuleOptions };
 export { default as BaseAdapter } from "./runtime/adapters/BaseAdapter";
 export { default as BaseChannel } from "./runtime/channels/BaseChannel";
+export {
+  IAnalytics,
+  AdapterSourceLike,
+  EventProperties,
+  EventPayload,
+  PagePayload,
+  IdentifyPayload,
+  InlineChannel,
+  InlineAdapter,
+  TrackEventDirectiveValue,
+  TrackEventDirectiveModifiers,
+} from "./runtime/types";

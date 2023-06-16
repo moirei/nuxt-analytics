@@ -1,10 +1,11 @@
 import { PropType, defineComponent, h, ref, withDirectives } from "vue";
-import { Enumerable, EventProperties } from "../types";
 import {
+  Enumerable,
+  EventProperties,
   TrackEventDirectiveModifiers,
   TrackEventDirectiveValue,
-  createTrackEventDirective,
-} from "../directives/TrackEvent";
+} from "../types";
+import { createTrackEventDirective } from "../directives/TrackEvent";
 
 export default defineComponent({
   name: "TrackEvent",
