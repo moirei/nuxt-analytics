@@ -56,6 +56,8 @@ export default defineNuxtPlugin((nuxtApp) => {
     env,
   });
 
+  analytics["hooks"].addHooks(options.hooks);
+
   analytics.superProperties(options.superProperties);
 
   nuxtApp.provide("analytics", analytics);

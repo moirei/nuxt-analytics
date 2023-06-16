@@ -26,6 +26,7 @@ export default defineNuxtModule<ModuleOptions>({
     channels: {},
     adapters: [],
     queueConcurrency: 10,
+    hooks: {},
   },
   setup(options, nuxt) {
     if (!Object.keys(options.channels).length) {

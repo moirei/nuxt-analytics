@@ -92,6 +92,7 @@ export interface ModuleOptions<
   queueConcurrency: number;
   channels: Record<string, ChannelsConfigs[C] | InlineChannel>;
   adapters: AdapterSourceLike[];
+  hooks: Partial<AnalyticsHooks>;
 }
 
 export interface AnalyticsHooks {
