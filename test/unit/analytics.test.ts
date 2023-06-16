@@ -1,6 +1,7 @@
 import { describe, it, expect, vi, afterEach, afterAll } from "vitest";
 import { Analytics, AnalyticsOptions } from "../../src/runtime/Analytics";
 import { fakeAdapter, fakeChannel } from "../faker";
+import { BaseAdapter } from "../../src/module";
 
 describe("analytics", async () => {
   let analytics: Analytics;
@@ -57,6 +58,110 @@ describe("analytics", async () => {
     await analytics.boot();
 
     expect(installSpy).not.toHaveBeenCalled();
+  });
+
+  it("should add adapter hooks", async () => {
+    const hookSpy = vi.fn();
+    const trackSpy = vi.fn();
+
+    class TestAdapter extends BaseAdapter {
+      public configure(): void {
+        this.hooks("track:before", hookSpy);
+      }
+    }
+
+    const channel = fakeChannel({
+      track: trackSpy,
+    });
+
+    analytics = createAnalytics({
+      adapters: [new TestAdapter()],
+      channels: [channel],
+    });
+
+    await analytics.boot();
+
+    await analytics.track({ event: "test" });
+
+    expect(trackSpy).toHaveBeenCalled();
+    expect(hookSpy).toHaveBeenCalled();
+  });
+
+  it("expect adapter hooks to modify event props", async () => {
+    const trackSpy = vi.fn();
+    const props = { k1: "v1" };
+    const modifyProps = { k2: "v2" };
+
+    class TestAdapter extends BaseAdapter {
+      public configure(): void {
+        this.hooks("track:before", (payload) => {
+          payload.props = {
+            ...payload.props,
+            ...modifyProps,
+          };
+        });
+      }
+    }
+
+    const channel = fakeChannel({
+      track: trackSpy,
+    });
+
+    analytics = createAnalytics({
+      adapters: [new TestAdapter()],
+      channels: [channel],
+    });
+
+    await analytics.boot();
+
+    await analytics.track({ event: "test", props });
+
+    expect(trackSpy).toHaveBeenCalledWith(
+      expect.objectContaining({
+        props: {
+          ...props,
+          ...modifyProps,
+        },
+      })
+    );
+  });
+
+  it("expects getAdapter to prefer non-empty maps", async () => {
+    const trackSpy = vi.fn();
+
+    class EmptyAdapter extends BaseAdapter {
+      public configure(): void {
+        //
+      }
+    }
+
+    class PreferredAdapter extends BaseAdapter {
+      public configure(): void {
+        this.mapEventName("test", "mapped-test");
+      }
+    }
+
+    const channel = fakeChannel({
+      track: trackSpy,
+    });
+
+    analytics = createAnalytics({
+      adapters: [
+        new EmptyAdapter(),
+        new PreferredAdapter(),
+        new EmptyAdapter(),
+      ],
+      channels: [channel],
+    });
+
+    await analytics.boot();
+    await analytics.track({ event: "test" });
+
+    expect(trackSpy).toHaveBeenCalledWith(
+      expect.objectContaining({
+        event: "mapped-test",
+      })
+    );
   });
 
   it("should boot analytics once", async () => {

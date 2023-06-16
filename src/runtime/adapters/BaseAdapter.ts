@@ -1,4 +1,9 @@
-import { Enumerable, EventPayload, EventProperties } from "../types";
+import {
+  AnalyticsHooks,
+  Enumerable,
+  EventPayload,
+  EventProperties,
+} from "../types";
 import { normaliseValue, unwrap } from "../utils";
 
 export default abstract class BaseAdapter {
@@ -19,6 +24,12 @@ export default abstract class BaseAdapter {
    * @var {PropertyKey[]}
    */
   protected $except: PropertyKey[] = [];
+
+  /**
+   * List hooks to register.
+   * @var {Partial<AnalyticsHooks>}
+   */
+  protected $hooks: Partial<AnalyticsHooks> = {};
 
   private eventNameMap = new Map();
   private eventPropertyMap = new Map();
@@ -118,6 +129,28 @@ export default abstract class BaseAdapter {
     for (let key of keys) {
       key = normaliseValue(key);
       this.mapEventProperties({ [key]: value });
+    }
+  }
+
+  /**
+   * Register hooks
+   */
+  protected hooks(hooks: AnalyticsHooks): void;
+  protected hooks<H extends keyof AnalyticsHooks>(
+    hook: H,
+    callback: AnalyticsHooks[H]
+  ): void;
+  protected hooks<H extends keyof AnalyticsHooks>(
+    hooks: H | AnalyticsHooks,
+    callback?: AnalyticsHooks[H]
+  ) {
+    if (callback) {
+      this.$hooks[hooks as H] = callback;
+    } else {
+      this.$hooks = {
+        ...this.$hooks,
+        ...(hooks as AnalyticsHooks),
+      };
     }
   }
 

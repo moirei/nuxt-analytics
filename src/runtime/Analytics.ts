@@ -77,6 +77,12 @@ export class Analytics implements IAnalytics {
     await onEach(this.channels, (channel) => channel.install());
     await onEach(this.adapters, (adapter) => adapter.configure());
 
+    for (const adapter of this.adapters) {
+      if (adapter["$hooks"]) {
+        this.hooks.addHooks(adapter["$hooks"]);
+      }
+    }
+
     this.booted = true;
 
     // ready
@@ -428,7 +434,18 @@ export class Analytics implements IAnalytics {
     channel: Channel,
     payload: EventPayload
   ): BaseAdapter | undefined {
-    return this.adapters.find((adapter) => {
+    const preferredAdapters: BaseAdapter[] = [];
+    const otherAdapters: BaseAdapter[] = [];
+
+    for (const adapter of this.adapters) {
+      if (adapter["eventNameMap"].size || adapter["eventPropertyMap"].size) {
+        preferredAdapters.push(adapter);
+      } else {
+        otherAdapters.push(adapter);
+      }
+    }
+
+    const predicate = (adapter: BaseAdapter) => {
       const channels = adapter.channels();
 
       if (
@@ -451,7 +468,15 @@ export class Analytics implements IAnalytics {
       }
 
       return true;
-    });
+    };
+
+    const adapter = preferredAdapters.find(predicate);
+
+    if (adapter) {
+      return adapter;
+    }
+
+    return otherAdapters.find(predicate);
   }
 
   private builder(): Builder {
