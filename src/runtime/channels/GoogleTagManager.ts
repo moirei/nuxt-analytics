@@ -38,7 +38,7 @@ export default class GoogleTagManager extends BaseChannel {
       this.dataLayer = this.config.dataLayer;
     }
 
-    this.#injectScript(this.config.id, envParamsString);
+    this.injectScript(this.config.id, envParamsString);
   }
 
   public uninstall(): void {
@@ -64,7 +64,7 @@ export default class GoogleTagManager extends BaseChannel {
     //
   }
 
-  #injectScript(id: string, envParamsString: string) {
+  private injectScript(id: string, envParamsString: string) {
     /* eslint-disable */
     (function (w, d, s, l, i) {
       w[l] = w[l] || [];

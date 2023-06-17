@@ -31,7 +31,7 @@ export default class Mixpanel extends BaseChannel {
       this.config.token
     );
 
-    this.#injectScript();
+    this.injectScript();
 
     window.mixpanel.init(this.config.token, {
       api_host: this.config.apiHost,
@@ -91,7 +91,7 @@ export default class Mixpanel extends BaseChannel {
     };
   }
 
-  #injectScript() {
+  private injectScript() {
     /* eslint-disable */
     (function (c, a) {
       if (!a.__SV) {

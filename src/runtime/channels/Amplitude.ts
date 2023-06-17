@@ -29,7 +29,7 @@ export default class Amplitude extends BaseChannel {
       apiKey
     );
 
-    this.#injectScript();
+    this.injectScript();
 
     this.getInstance().init(apiKey, null, options || {});
   }
@@ -85,7 +85,7 @@ export default class Amplitude extends BaseChannel {
     window.amplitude.getInstance();
   }
 
-  #injectScript() {
+  private injectScript() {
     /* eslint-disable */
     (function (e, t) {
       var n = e.amplitude || { _q: [], _iq: {} };

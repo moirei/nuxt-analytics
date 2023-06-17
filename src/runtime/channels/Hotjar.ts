@@ -24,7 +24,7 @@ export default class Hotjar extends BaseChannel {
       this.config.siteId
     );
 
-    this.#injectScript(this.config.siteId);
+    this.injectScript(this.config.siteId);
   }
 
   public uninstall(): void {
@@ -48,7 +48,7 @@ export default class Hotjar extends BaseChannel {
     window.hj("identify", id, props);
   }
 
-  #injectScript(siteId: string) {
+  private injectScript(siteId: string) {
     /* eslint-disable */
     (function (h, o, t, j, a, r) {
       h.hj =

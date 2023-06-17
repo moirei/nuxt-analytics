@@ -63,7 +63,7 @@ export default class Posthog extends BaseChannel {
       this.config.token
     );
 
-    this.#injectScript();
+    this.injectScript();
 
     const options = clean({
       api_host: this.config.apiHost || "https://app.posthog.com",
@@ -117,7 +117,7 @@ export default class Posthog extends BaseChannel {
     window.posthog.identify(id, user);
   }
 
-  #injectScript() {
+  private injectScript() {
     /* eslint-disable */
     (function (t, e) {
       var o, n, p, r;

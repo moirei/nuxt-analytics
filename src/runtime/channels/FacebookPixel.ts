@@ -33,7 +33,7 @@ export default class FacebookPixel extends BaseChannel {
       return;
     }
 
-    this.#injectScript();
+    this.injectScript();
 
     if (dataProcessingOptions) {
       const { method, country, state } = dataProcessingOptions;
@@ -68,7 +68,7 @@ export default class FacebookPixel extends BaseChannel {
     //
   }
 
-  #injectScript() {
+  private injectScript() {
     /* eslint-disable */
     (function (f, b, e, v, n, t, s) {
       if (f.fbq) return;

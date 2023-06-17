@@ -30,7 +30,7 @@ export default class GoogleAnalytics4 extends BaseChannel {
       ...options,
     };
 
-    this.#injectScript(id);
+    this.injectScript(id);
 
     window.dataLayer = window.dataLayer || [];
     this.gtag("js", new Date());
@@ -75,7 +75,7 @@ export default class GoogleAnalytics4 extends BaseChannel {
     return args;
   }
 
-  #injectScript(id: string) {
+  private injectScript(id: string) {
     const script = document.createElement("script");
     script.async = true;
     script.src = `https://www.googletagmanager.com/gtag/js?id=${id}`;

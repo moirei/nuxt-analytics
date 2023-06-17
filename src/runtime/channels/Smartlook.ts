@@ -28,7 +28,7 @@ export default class Smartlook extends BaseChannel {
       this.config.projectKey
     );
 
-    this.#injectScript();
+    this.injectScript();
 
     const options = {
       region: this.config.region,
@@ -63,7 +63,7 @@ export default class Smartlook extends BaseChannel {
     window.smartlook.identify(id, props);
   }
 
-  #injectScript() {
+  private injectScript() {
     /* eslint-disable */
     (function (w, d) {
       var o = (smartlook = function () {

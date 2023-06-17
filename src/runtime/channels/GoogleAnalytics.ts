@@ -37,7 +37,7 @@ export default class GoogleAnalytics extends BaseChannel {
 
     const hasOptions = Object.keys(config).length > 1;
 
-    this.#injectScript(config.debug);
+    this.injectScript(config.debug);
 
     if (config.trace === true) {
       window.ga_debug = { trace: true };
@@ -61,9 +61,8 @@ export default class GoogleAnalytics extends BaseChannel {
     delete window.ga;
   }
 
-  public track(payload: EventPayload): void {
-    const sendEvent = { hitType: "event" };
-    const gaEvent: any = {};
+  public track(payload: EventPayload): any {
+    const gaEvent: any = { hitType: "event" };
 
     if (payload.props?.nonInteraction) {
       gaEvent.nonInteraction = payload.props.nonInteraction;
@@ -72,12 +71,14 @@ export default class GoogleAnalytics extends BaseChannel {
 
     gaEvent["eventAction"] = payload.event;
 
-    const event = { ...gaEvent, ...sendEvent };
+    const event = { ...payload.props, ...gaEvent };
 
     window.ga(this.gaSendKey, event);
+
+    return event;
   }
 
-  public page(payload: PagePayload): void {
+  public page(payload: PagePayload): any {
     const sendEvent = { hitType: "pageview" };
     const event = { ...sendEvent, ...payload.props };
 
@@ -86,13 +87,15 @@ export default class GoogleAnalytics extends BaseChannel {
     }
 
     window.ga(this.gaSendKey, event);
+
+    return event;
   }
 
   public identify(payload: IdentifyPayload): void {
     window.ga("set", "userId", payload.user.id);
   }
 
-  #injectScript(debug: boolean) {
+  private injectScript(debug: boolean) {
     /* eslint-disable */
     (function (i, s, o, g, r, a, m) {
       i["GoogleAnalyticsObject"] = r;
