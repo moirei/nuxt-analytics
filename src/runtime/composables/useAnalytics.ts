@@ -29,6 +29,8 @@ export const useAnalytics = () => {
 
   const superProperties = analytics.superProperties.bind(analytics);
   const on = analytics.on.bind(analytics);
+  const only = analytics.only.bind(analytics);
+  const except = analytics.except.bind(analytics);
 
   return {
     track,
@@ -36,5 +38,7 @@ export const useAnalytics = () => {
     identify,
     superProperties,
     on,
+    only,
+    except,
   };
 };

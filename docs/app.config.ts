@@ -2,7 +2,7 @@ export default defineAppConfig({
   docus: {
     title: "nuxt-analytics",
     description: "A Nuxt library for tracking app events.",
-    image: "/logo.png",
+    image: "/cover.jpg",
     socials: {
       github: "moirei/nuxt-analytics",
     },
@@ -16,17 +16,18 @@ export default defineAppConfig({
     aside: {
       level: 0,
       collapsed: false,
-      exclude: [],
+      // exclude: [],
     },
     main: {
       padded: true,
       fluid: true,
     },
     header: {
+      title: "Nuxt Apollo",
       logo: true,
-      showLinkIcon: true,
-      exclude: [],
-      fluid: true,
+      // showLinkIcon: true,
+      // exclude: [],
+      // fluid: true
     },
     footer: {
       iconLinks: [
