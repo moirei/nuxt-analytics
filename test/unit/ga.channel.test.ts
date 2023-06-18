@@ -9,7 +9,7 @@ import {
 } from "vitest";
 import GoogleAnalytics from "../../src/runtime/channels/GoogleAnalytics";
 
-describe("ga [channel]", async () => {
+describe("ga [channel]", () => {
   let channel: GoogleAnalytics;
   let config: any;
   let gaSpy: SpyInstance;

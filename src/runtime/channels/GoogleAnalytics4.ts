@@ -46,7 +46,8 @@ export default class GoogleAnalytics4 extends BaseChannel {
   }
 
   public page(payload: PagePayload): void {
-    if (this.options.send_page_view) {
+    console.log("options", this.options);
+    if (!this.options.send_page_view) {
       return;
     }
 
