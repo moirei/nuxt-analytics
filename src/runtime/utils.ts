@@ -173,3 +173,6 @@ export const clone = <T>(value: T): T => JSON.parse(JSON.stringify(value));
 
 export const upperFirst = (str: string): string =>
   str.charAt(0).toUpperCase() + str.slice(1);
+
+export const isUndefined = (value: any): value is undefined =>
+  value === undefined;

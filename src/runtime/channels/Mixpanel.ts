@@ -1,7 +1,7 @@
 import { EventUser } from "#analytics";
 import { EventPayload, IdentifyPayload, PagePayload } from "../types";
 import BaseChannel from "./BaseChannel";
-import { assert, isEmpty } from "../utils";
+import { assert, isEmpty, isUndefined } from "../utils";
 import { removeFromDOM } from "../lib";
 
 declare global {
@@ -18,6 +18,7 @@ declare module "#analytics" {
       debug?: boolean;
       trackPageview?: boolean;
       batchRequests?: boolean;
+      secureCookie?: boolean;
     };
   }
 }
@@ -38,6 +39,7 @@ export default class Mixpanel extends BaseChannel {
       debug: this.config.debug,
       track_pageview: this.config.trackPageview,
       batch_requests: this.config.batchRequests,
+      secure_cookie: this.config.secureCookie,
     });
   }
 
@@ -72,23 +74,40 @@ export default class Mixpanel extends BaseChannel {
     }
   }
 
+  public alias<A, O>(options: { alias: A; original?: O }) {
+    const { alias, original } = options;
+
+    if (original) {
+      window.mixpanel.alias(alias, original);
+    } else {
+      window.mixpanel.alias(alias);
+    }
+  }
+
   protected getIdentityPayload(user: EventUser) {
-    return {
-      distinct_id: user.id,
-      $first_name: user.firstName,
-      $last_name: user.lastName,
-      $name: user.name,
-      $email: user.email,
-      // $created: user.createdAt
-      //   ? moment(user.createdAt).format("Y-m-dTh:i:s")
-      //   : null,
-      // $last_seen: user.updatedAt
-      //   ? moment(user.updatedAt).format("Y-m-dTh:i:s")
-      //   : null,
-      $city: user.city,
-      $region: user.region,
-      $country: user.country,
-    };
+    const {
+      id,
+      firstName,
+      lastName,
+      name,
+      email,
+      city,
+      region,
+      country,
+      ...props
+    } = user;
+
+    props["distinct_id"] = id;
+
+    if (!isUndefined(firstName)) props["$first_name"] = firstName;
+    if (!isUndefined(lastName)) props["$last_name"] = lastName;
+    if (!isUndefined(name)) props["$name"] = name;
+    if (!isUndefined(email)) props["$email"] = email;
+    if (!isUndefined(city)) props["$city"] = city;
+    if (!isUndefined(region)) props["$region"] = region;
+    if (!isUndefined(country)) props["$country"] = country;
+
+    return props;
   }
 
   private injectScript() {
