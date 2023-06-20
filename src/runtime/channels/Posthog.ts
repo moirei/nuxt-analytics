@@ -133,9 +133,9 @@ export default class Posthog extends BaseChannel {
               });
           }
           ((p = t.createElement("script")).type = "text/javascript"),
+            (p.id = "posthog"),
             (p.async = !0),
             (p.src = s.api_host + "/static/array.js"),
-            (p.id = "posthog"),
             (r = t.getElementsByTagName("script")[0]).parentNode.insertBefore(
               p,
               r
