@@ -29,7 +29,7 @@ export default class FacebookPixel extends BaseChannel {
 
     assert(`You must pass a valid \`id\` to the ${this.name} channel`, id);
 
-    if (!window.fbq) {
+    if (window.fbq) {
       return;
     }
 
