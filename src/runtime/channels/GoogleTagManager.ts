@@ -50,13 +50,14 @@ export default class GoogleTagManager extends BaseChannel {
     window[this.dataLayer].push({
       ...payload.props,
       event: payload.event,
+      eventAction: payload.props?.eventAction || payload.event,
     });
   }
 
   public page(payload: PagePayload): void {
     return this.track({
       ...payload,
-      event: "pageview",
+      event: payload.props?.event || "pageview",
     });
   }
 

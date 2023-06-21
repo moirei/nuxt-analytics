@@ -1,3 +1,4 @@
+import { removeFromDOM } from "../lib";
 import { EventPayload, IdentifyPayload, PagePayload } from "../types";
 import { assert } from "../utils";
 import BaseChannel from "./BaseChannel";
@@ -38,7 +39,8 @@ export default class GoogleAnalytics4 extends BaseChannel {
   }
 
   public uninstall(): void {
-    //
+    removeFromDOM('script[src*="gtag/js"]');
+    delete window.dataLayer;
   }
 
   public track(payload: EventPayload): void {
@@ -46,7 +48,6 @@ export default class GoogleAnalytics4 extends BaseChannel {
   }
 
   public page(payload: PagePayload): void {
-    console.log("options", this.options);
     if (!this.options.send_page_view) {
       return;
     }
