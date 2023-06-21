@@ -1,6 +1,6 @@
 import { removeFromDOM } from "../lib";
 import { EventPayload, IdentifyPayload, PagePayload } from "../types";
-import { assert } from "../utils";
+import { assert, isEmpty } from "../utils";
 import BaseChannel from "./BaseChannel";
 
 declare global {
@@ -48,7 +48,11 @@ export default class Smartlook extends BaseChannel {
   }
 
   public track(payload: EventPayload): void {
-    window.smartlook.track(payload.event, payload.props);
+    if (isEmpty(payload.props)) {
+      window.smartlook.track(payload.event);
+    } else {
+      window.smartlook.track(payload.event, payload.props);
+    }
   }
 
   public page(payload: PagePayload): void {
@@ -66,7 +70,7 @@ export default class Smartlook extends BaseChannel {
   private injectScript() {
     /* eslint-disable */
     (function (w, d) {
-      var o = (smartlook = function () {
+      var o = (w.smartlook = function () {
           o.api.push(arguments);
         }),
         h = d.getElementsByTagName("head")[0];
