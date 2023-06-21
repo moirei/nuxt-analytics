@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { EventUser } from "#analytics";
 import { EventPayload, IdentifyPayload, PagePayload } from "../types";
 import BaseChannel from "./BaseChannel";

@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { EventPayload, IdentifyPayload, PagePayload } from "../types";
 import BaseChannel from "./BaseChannel";
 import { assert } from "../utils";

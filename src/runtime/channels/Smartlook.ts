@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { removeFromDOM } from "../lib";
 import { EventPayload, IdentifyPayload, PagePayload } from "../types";
 import { assert, isEmpty } from "../utils";

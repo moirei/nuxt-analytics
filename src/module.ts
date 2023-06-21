@@ -93,7 +93,7 @@ export * from "./runtime/channels";
 export { ModuleOptions };
 export { default as BaseAdapter } from "./runtime/adapters/BaseAdapter";
 export { default as BaseChannel } from "./runtime/channels/BaseChannel";
-export {
+export type {
   IAnalytics,
   AdapterSourceLike,
   EventProperties,
