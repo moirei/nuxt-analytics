@@ -8,6 +8,7 @@ import {
   vi,
 } from "vitest";
 import Mixpanel from "../../src/runtime/channels/Mixpanel";
+import { hasScript } from "./utils";
 
 describe("mixpanel [channel]", () => {
   let channel: Mixpanel;
@@ -34,6 +35,13 @@ describe("mixpanel [channel]", () => {
 
   afterEach(async () => {
     await channel.uninstall();
+  });
+
+  it.todo("expects mixpanel script to have been injected", async () => {
+    // const selector = 'script[src*="mixpanel"]';
+    const selector = 'script[id="mixpanel"]';
+
+    expect(hasScript(selector)).toBeTruthy();
   });
 
   it("expects identify to call `mixpanel.identify` and `mixpanel.people.set` with the right arguments", async () => {

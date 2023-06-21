@@ -9,6 +9,7 @@ import {
   vi,
 } from "vitest";
 import GoogleTagManager from "../../src/runtime/channels/GoogleTagManager";
+import { hasScript, injectDummyScript } from "./utils";
 
 describe("gtm [channel]", () => {
   let channel: GoogleTagManager;
@@ -16,14 +17,8 @@ describe("gtm [channel]", () => {
   let pushSpy: SpyInstance;
 
   beforeAll(() => {
-    const parentNode = {
-      insertBefore: () => void 0,
-    };
-    vi.spyOn(document, "getElementsByTagName").mockImplementation((): any => {
-      return [{ parentNode }];
-    });
-
-    vi.useFakeTimers();
+    // used by gtm to anchor its position
+    injectDummyScript();
   });
 
   beforeEach(async () => {
@@ -41,6 +36,12 @@ describe("gtm [channel]", () => {
 
   afterEach(async () => {
     await channel.uninstall();
+  });
+
+  it("expects script to have been injected", async () => {
+    const selector = 'script[src*="gtm.js"]';
+
+    expect(hasScript(selector)).toBeTruthy();
   });
 
   it("expects track to push correct data shape", async () => {

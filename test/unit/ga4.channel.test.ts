@@ -8,11 +8,13 @@ import {
   vi,
 } from "vitest";
 import GoogleAnalytics4 from "../../src/runtime/channels/GoogleAnalytics4";
+import { hasScript } from "./utils";
 
 describe("ga4 [channel]", () => {
   let channel: GoogleAnalytics4;
   let config: any;
   let gaSpy: SpyInstance;
+  let injectScriptSpy: SpyInstance;
 
   beforeEach(() => {
     config = {
@@ -20,7 +22,9 @@ describe("ga4 [channel]", () => {
     };
     channel = new GoogleAnalytics4("ga", config);
 
-    vi.spyOn(channel as any, "injectScript").mockImplementation(() => {});
+    injectScriptSpy = vi
+      .spyOn(channel as any, "injectScript")
+      .mockImplementation(() => {});
     window.ga = function () {};
 
     gaSpy = vi.spyOn(window, "ga").mockImplementation(() => {
@@ -30,6 +34,18 @@ describe("ga4 [channel]", () => {
 
   afterEach(async () => {
     await channel.uninstall();
+  });
+
+  it("expects gtag script to have been injected", async () => {
+    const selector = 'script[src*="gtag/js"]';
+
+    injectScriptSpy.mockRestore();
+
+    expect(hasScript(selector)).toBeFalsy();
+
+    channel["injectScript"]("1234567890");
+
+    expect(hasScript(selector)).toBeTruthy();
   });
 
   it("expects track to return the correct response shape", async () => {

@@ -8,6 +8,7 @@ import {
   vi,
 } from "vitest";
 import Hotjar from "../../src/runtime/channels/Hotjar";
+import { hasScript } from "./utils";
 
 describe("hotjar [channel]", () => {
   let channel: Hotjar;
@@ -29,6 +30,12 @@ describe("hotjar [channel]", () => {
 
   afterEach(async () => {
     await channel.uninstall();
+  });
+
+  it("expects hotjar script to have been injected", async () => {
+    const selector = 'script[id="hotjar"]';
+
+    expect(hasScript(selector)).toBeTruthy();
   });
 
   it("expects identify to call Hotjar with the right arguments", async () => {

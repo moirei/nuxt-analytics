@@ -8,11 +8,13 @@ import {
   vi,
 } from "vitest";
 import GoogleAnalytics from "../../src/runtime/channels/GoogleAnalytics";
+import { hasScript, injectDummyScript } from "./utils";
 
 describe("ga [channel]", () => {
   let channel: GoogleAnalytics;
   let config: any;
   let gaSpy: SpyInstance;
+  let injectScriptSpy: SpyInstance;
 
   beforeEach(() => {
     config = {
@@ -21,7 +23,9 @@ describe("ga [channel]", () => {
     };
     channel = new GoogleAnalytics("ga", config);
 
-    vi.spyOn(channel as any, "injectScript").mockImplementation(() => {});
+    injectScriptSpy = vi
+      .spyOn(channel as any, "injectScript")
+      .mockImplementation(() => {});
     window.ga = function () {};
 
     gaSpy = vi.spyOn(window, "ga").mockImplementation(() => {
@@ -31,6 +35,21 @@ describe("ga [channel]", () => {
 
   afterEach(async () => {
     await channel.uninstall();
+  });
+
+  it("expects ga script to have been injected", async () => {
+    const selector = 'script[src*="google-analytics"]';
+
+    injectScriptSpy.mockRestore();
+
+    // used by ga to anchor its position
+    injectDummyScript();
+
+    expect(hasScript(selector)).toBeFalsy();
+
+    channel["injectScript"](false);
+
+    expect(hasScript(selector)).toBeTruthy();
   });
 
   it("expects init to call ga create with a valid config", async () => {

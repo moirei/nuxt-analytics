@@ -188,6 +188,7 @@ export default class Mixpanel extends BaseChannel {
         };
         a.__SV = 1.2;
         b = c.createElement("script");
+        b.id = "mixpanel";
         b.type = "text/javascript";
         b.async = !0;
         b.src =

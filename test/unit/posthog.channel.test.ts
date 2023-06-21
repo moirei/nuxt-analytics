@@ -1,5 +1,7 @@
 import { SpyInstance, beforeEach, describe, expect, it, vi } from "vitest";
 import Posthog from "../../src/runtime/channels/Posthog";
+import { removeFromDOM } from "../../src/runtime/lib";
+import { hasScript, injectDummyScript } from "./utils";
 
 describe("posthog [channel]", () => {
   let channel: Posthog;
@@ -25,11 +27,30 @@ describe("posthog [channel]", () => {
     window.posthog = {
       capture: captureSpy,
       identify: identifySpy,
-      init: (_, { loaded }: any) => loaded && loaded(),
+      init: (_: any, { loaded }: any) => loaded && loaded(),
     };
   });
 
-  it("expects install to inject script", async () => {
+  it("expects injectScript to inject posthog script", async () => {
+    injectScriptSpy.mockRestore();
+    const selector = 'script[id="posthog"]';
+
+    // used by posthog to anchor its position
+    injectDummyScript();
+
+    expect(hasScript(selector)).toBeFalsy();
+
+    channel["injectScript"]();
+    window.posthog.init(config.token, {
+      api_host: "https://app.posthog.com",
+    });
+
+    expect(hasScript(selector)).toBeTruthy();
+
+    removeFromDOM(selector);
+  });
+
+  it("expects install to call injectScript", async () => {
     await channel.install();
     expect(injectScriptSpy).toHaveBeenCalled();
   });

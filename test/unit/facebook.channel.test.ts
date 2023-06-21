@@ -11,6 +11,7 @@ import {
 } from "vitest";
 import FacebookPixel from "../../src/runtime/channels/FacebookPixel";
 import { setTimeout } from "timers";
+import { hasScript, injectDummyScript } from "./utils";
 
 async function waitForScripts(): Promise<SpyInstance> {
   return new Promise((resolve) => {
@@ -36,14 +37,8 @@ describe("facebook [channel]", () => {
   let config: any;
 
   beforeAll(() => {
-    const parentNode = {
-      insertBefore: () => void 0,
-    };
-    vi.spyOn(document, "getElementsByTagName").mockImplementation((): any => {
-      return [{ parentNode }];
-    });
-
-    vi.useFakeTimers();
+    // used by fbq to anchor its position
+    injectDummyScript();
   });
 
   beforeEach(async () => {
@@ -66,6 +61,12 @@ describe("facebook [channel]", () => {
 
   afterAll(() => {
     vi.clearAllTimers();
+  });
+
+  it("expects fbq script to have been injected", async () => {
+    const selector = 'script[src*="fbevents.js"]';
+
+    expect(hasScript(selector)).toBeTruthy();
   });
 
   it("expects track to call `fbq.track` with the right arguments", async () => {

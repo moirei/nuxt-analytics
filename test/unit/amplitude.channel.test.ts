@@ -9,6 +9,7 @@ import {
   vi,
 } from "vitest";
 import Amplitude from "../../src/runtime/channels/Amplitude";
+import { hasScript, injectDummyScript } from "./utils";
 
 describe("amplitude [channel]", () => {
   let channel: Amplitude;
@@ -21,12 +22,8 @@ describe("amplitude [channel]", () => {
   let fakeIndentity: { set: SpyInstance; get: SpyInstance };
 
   beforeAll(() => {
-    const parentNode = {
-      insertBefore: () => void 0,
-    };
-    vi.spyOn(document, "getElementsByTagName").mockImplementation((): any => {
-      return [{ parentNode }];
-    });
+    // used by amplitude to anchor its position
+    injectDummyScript();
   });
 
   beforeEach(async () => {
@@ -61,6 +58,12 @@ describe("amplitude [channel]", () => {
 
   afterEach(async () => {
     await channel.uninstall();
+  });
+
+  it("expects script to have been injected", async () => {
+    const selector = 'script[src*="amplitude"]';
+
+    expect(hasScript(selector)).toBeTruthy();
   });
 
   it("expects identify to set the distinct user ID, and calls amplitude with any extra user properties", async () => {
