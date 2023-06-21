@@ -1,6 +1,6 @@
 {
   "name": "@moirei/nuxt-analytics",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Analytics library for Nuxt 3",
   "repository": "@moirei/nuxt-analytics",
   "license": "MIT",
