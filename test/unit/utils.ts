@@ -1,4 +1,5 @@
 export const injectDummyScript = () => {
+  /* eslint-disable */
   (function (d) {
     let h = d.getElementsByTagName("head")[0];
     var c = d.createElement("script");
@@ -8,6 +9,8 @@ export const injectDummyScript = () => {
     c.id = "dummy";
     h.appendChild(c);
   })(document);
+
+  /* eslint-enable */
 };
 
 export const hasScript = (selector: string) => {

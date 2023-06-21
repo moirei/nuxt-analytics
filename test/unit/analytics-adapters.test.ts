@@ -1,13 +1,4 @@
-import {
-  describe,
-  it,
-  expect,
-  vi,
-  afterEach,
-  afterAll,
-  beforeEach,
-  beforeAll,
-} from "vitest";
+import { describe, it, expect, vi, afterEach, beforeEach } from "vitest";
 import { Analytics, AnalyticsOptions } from "../../src/runtime/Analytics";
 import { fakeAdapter, fakeChannel } from "../faker";
 import { Channel } from "../../src/runtime/types";

@@ -1,8 +1,5 @@
-import { beforeEach, describe, expect, it, vi } from "vitest";
-import {
-  TrackEventDirective,
-  // createTrackEventDirective,
-} from "../../src/runtime/directives/TrackEvent";
+import { beforeEach, describe, it } from "vitest";
+import { TrackEventDirective } from "../../src/runtime/directives/TrackEvent";
 
 describe.todo("v-track-event [directive]", () => {
   let TrackEvent: TrackEventDirective;

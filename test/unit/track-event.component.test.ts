@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, it } from "vitest";
 // import { mount } from "@vue/test-utils";
 // import TrackEvent from "../../src/runtime/components/TrackEvent";
 
