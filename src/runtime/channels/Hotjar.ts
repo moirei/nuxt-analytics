@@ -1,6 +1,6 @@
 import { removeFromDOM } from "../lib";
 import { EventPayload, IdentifyPayload, PagePayload } from "../types";
-import { assert } from "../utils";
+import { assert, isEmpty } from "../utils";
 import BaseChannel from "./BaseChannel";
 
 declare global {
@@ -33,7 +33,11 @@ export default class Hotjar extends BaseChannel {
   }
 
   public track(payload: EventPayload): void {
-    window.hj("event", payload.event);
+    if (isEmpty(payload.props)) {
+      window.hj("event", payload.event);
+    } else {
+      window.hj("event", payload.event, payload.props);
+    }
   }
 
   public page(payload: PagePayload): void {
